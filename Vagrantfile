@@ -183,7 +183,8 @@ Vagrant.configure("2") do |config|
 
       # data needed to be copied
       config.vm.provision "file", source: "#{FILES_PATH}",  :destination => "/tmp/user-data"
-      # fix recomedations : Cgroup Driver: systemd
+      config.vm.provision :shell, inline: "/tmp/user-data/fixups.sh", :privileged => true
+     # fix recomedations : Cgroup Driver: systemd
       config.vm.provision :shell, inline: "mkdir -p /etc/docker/;mv /tmp/user-data/daemon.json /etc/docker/", :privileged => true
       config.vm.provision :shell, inline: "mkdir -p /etc/systemd/system/docker.service.d", :privileged => true
       config.vm.provision :shell, inline: "systemctl daemon-reload;systemctl restart docker", :privileged => true
